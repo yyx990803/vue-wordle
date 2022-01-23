@@ -4,8 +4,8 @@ import { allWords } from './words'
 import Keyboard from './Keyboard.vue'
 import { LetterState } from './types'
 
-// try to guess this by actually playing the game :)
-const answer = atob('aGVsbG8=')
+// Pick a random word from dictonary
+const answer = allWords[Math.floor(Math.random() * allWords.length)]
 
 class Tile {
   letter = ''
