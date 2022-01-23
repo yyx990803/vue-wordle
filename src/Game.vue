@@ -90,7 +90,7 @@ function completeRow() {
     })
     // second pass: mark the present
     currentRow.forEach((tile) => {
-      if (answerLetters.includes(tile.letter)) {
+      if (!tile.state && answerLetters.includes(tile.letter)) {
         tile.state = LetterState.PRESENT
         answerLetters[answerLetters.indexOf(tile.letter)] = null
         if (!letterStates[tile.letter]) {
