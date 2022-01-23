@@ -74,8 +74,7 @@ function completeRow() {
       return
     }
 
-    let correct = true
-    let answerLetters: (string | null)[] = answer.split('')
+    const answerLetters: (string | null)[] = answer.split('')
     // first pass: mark correct ones
     currentRow.forEach((tile, i) => {
       if (answerLetters[i] === tile.letter) {
@@ -83,23 +82,24 @@ function completeRow() {
         answerLetters[i] = null
       }
     })
-    // second pass: mark the rest
-    currentRow.forEach((tile, i) => {
-      if (answerLetters[i]) {
-        if (answerLetters.includes(tile.letter)) {
-          tile.state = LetterState.PRESENT
-          answerLetters[i] = null
-          if (!letterStates[tile.letter]) {
-            letterStates[tile.letter] = LetterState.PRESENT
-          }
-          correct = false
-        } else {
-          tile.state = letterStates[tile.letter] = LetterState.ABSENT
-          correct = false
+    // second pass: mark the present
+    currentRow.forEach((tile) => {
+      if (answerLetters.includes(tile.letter)) {
+        tile.state = LetterState.PRESENT
+        answerLetters[answerLetters.indexOf(tile.letter)] = null
+        if (!letterStates[tile.letter]) {
+          letterStates[tile.letter] = LetterState.PRESENT
         }
       }
     })
-    if (correct) {
+    // 3rd pass: mark absent
+    currentRow.forEach((tile) => {
+      if (!tile.state) {
+        tile.state = LetterState.ABSENT
+      }
+    })
+
+    if (currentRow.every((tile) => tile.state === LetterState.CORRECT)) {
       // yay!
       allowInput = false
       showMessage(
