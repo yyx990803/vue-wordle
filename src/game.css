@@ -1,0 +1,40 @@
+body {
+  font-family: 'Clear Sans', 'Helvetica Neue', Arial, sans-serif;
+  text-align: center;
+  max-width: 500px;
+  margin: 0px auto;
+}
+
+h1 {
+  margin: 10px 0;
+}
+
+header {
+  border-bottom: 1px solid #ccc;
+  margin-bottom: 30px;
+  position: relative;
+}
+
+#source-link {
+  position: absolute;
+  right: 0;
+  top: 0.5em;
+}
+
+.correct,
+.present,
+.absent {
+  color: #fff;
+}
+
+.correct {
+  background-color: #6aaa64;
+}
+
+.present {
+  background-color: #c9b458;
+}
+
+.absent {
+  background-color: #787c7e;
+}
