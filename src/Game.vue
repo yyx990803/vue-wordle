@@ -21,6 +21,7 @@ const board = $ref(
 let message = $ref('')
 let allowInput = true
 let currentRowIndex = $ref(0)
+let shakeRowIndex = $ref(-1)
 const currentRow = $computed(() => board[currentRowIndex])
 
 // keep track of revealed letter state for the keyboard
@@ -68,6 +69,7 @@ function completeRow() {
   if (currentRow.every((tile) => tile.letter)) {
     const word = currentRow.map((tile) => tile.letter).join('')
     if (!allWords.includes(word) && word !== answer) {
+      shake()
       showMessage(`Not in word list`)
       return
     }
@@ -106,6 +108,7 @@ function completeRow() {
       showMessage(answer.toUpperCase())
     }
   } else {
+    shake()
     showMessage('Not enough letters')
   }
 }
@@ -114,6 +117,13 @@ function showMessage(msg: string) {
   message = msg
   setTimeout(() => {
     message = ''
+  }, 1000)
+}
+
+function shake() {
+  shakeRowIndex = currentRowIndex
+  setTimeout(() => {
+    shakeRowIndex = -1
   }, 1000)
 }
 </script>
@@ -132,7 +142,11 @@ function showMessage(msg: string) {
     >
   </header>
   <div id="board">
-    <div class="row" v-for="row in board">
+    <div
+      class="row"
+      v-for="(row, index) in board"
+      :class="{ shake: shakeRowIndex === index }"
+    >
       <div
         v-for="(tile, index) in row"
         :class="[
@@ -220,6 +234,7 @@ function showMessage(msg: string) {
 }
 .tile.filled .front {
   border-color: #999;
+  animation: zoom .2s;
 }
 .tile:not(.empty) {
   border: none;
@@ -229,5 +244,54 @@ function showMessage(msg: string) {
 }
 .tile.revealed .back {
   transform: rotateX(0deg);
+}
+
+@keyframes zoom {
+  0% {
+    transform: scale(1.1);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+.shake {
+  animation: shake 0.5s;
+}
+
+@keyframes shake {
+  0% {
+    transform: translate(1px);
+  }
+  10% {
+    transform: translate(-2px);
+  }
+  20% {
+    transform: translate(2px);
+  }
+  30% {
+    transform: translate(-2px);
+  }
+  40% {
+    transform: translate(2px);
+  }
+  50% {
+    transform: translate(-2px);
+  }
+  60% {
+    transform: translate(2px);
+  }
+  70% {
+    transform: translate(-2px);
+  }
+  80% {
+    transform: translate(2px);
+  }
+  90% {
+    transform: translate(-2px);
+  }
+  100% {
+    transform: translate(1px);
+  }
 }
 </style>
