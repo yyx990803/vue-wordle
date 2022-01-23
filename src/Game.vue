@@ -178,6 +178,7 @@ function completeRow() {
   height: 100%;
   transition: transform 0.6s;
   backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
 }
 .tile .front {
   border: 2px solid #ccc;
