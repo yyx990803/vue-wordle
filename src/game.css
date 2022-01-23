@@ -24,17 +24,17 @@ header {
 .correct,
 .present,
 .absent {
-  color: #fff;
+  color: #fff !important;
 }
 
 .correct {
-  background-color: #6aaa64;
+  background-color: #6aaa64 !important;
 }
 
 .present {
-  background-color: #c9b458;
+  background-color: #c9b458 !important;
 }
 
 .absent {
-  background-color: #787c7e;
+  background-color: #787c7e !important;
 }
