@@ -254,6 +254,8 @@ function shake() {
 }
 .tile.filled .front {
   border-color: #999;
+}
+.tile.filled {
   animation: zoom 0.2s;
 }
 .tile:not(.empty) {
