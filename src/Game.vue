@@ -95,7 +95,7 @@ function completeRow() {
     // 3rd pass: mark absent
     currentRow.forEach((tile) => {
       if (!tile.state) {
-        tile.state = LetterState.ABSENT
+        tile.state = letterStates[tile.letter] = LetterState.ABSENT
       }
     })
 
