@@ -4,6 +4,7 @@ import { answers, allWords } from './words'
 import Keyboard from './Keyboard.vue'
 import { LetterState } from './types'
 
+// get word of the day
 const now = new Date()
 const start = new Date(2022, 0, 0)
 const diff = Number(now) - Number(start)
@@ -13,6 +14,7 @@ while (day > answers.length) {
 }
 const answer = answers[day]
 
+// board state
 class Tile {
   letter = ''
   state = LetterState.INITIAL
@@ -33,14 +35,13 @@ const currentRow = $computed(() => board[currentRowIndex])
 // keep track of revealed letter state for the keyboard
 const letterStates: Record<string, LetterState> = $ref({})
 
+const onKeyup = (e: KeyboardEvent) => onKey(e.key)
+
 window.addEventListener('keyup', onKeyup)
+
 onUnmounted(() => {
   window.removeEventListener('keyup', onKeyup)
 })
-
-function onKeyup(e: KeyboardEvent) {
-  onKey(e.key)
-}
 
 function onKey(key: string) {
   if (!allowInput) return
@@ -197,8 +198,9 @@ function shake() {
   grid-gap: 5px;
   padding: 10px;
   box-sizing: border-box;
-  width: 350px;
-  height: 420px;
+  --height: min(420px, calc(var(--vh, 100vh) - 320px));
+  height: var(--height);
+  width: min(350px, calc(var(--height) / 6 * 5));
   margin: 0px auto;
 }
 .message {
@@ -230,6 +232,11 @@ function shake() {
   text-transform: uppercase;
   user-select: none;
   position: relative;
+}
+@media (max-height: 680px) {
+  .tile {
+    font-size: 3vh;
+  }
 }
 .tile .front,
 .tile .back {
