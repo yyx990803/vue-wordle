@@ -1,11 +1,17 @@
 <script setup lang="ts">
 import { onUnmounted } from 'vue'
-import { allWords } from './words'
+import { answers, allWords } from './words'
 import Keyboard from './Keyboard.vue'
 import { LetterState } from './types'
 
-// try to guess this by actually playing the game :)
-const answer = atob('aGVsbG8=')
+const now = new Date()
+const start = new Date(2022, 0, 0)
+const diff = Number(now) - Number(start)
+let day = Math.floor(diff / (1000 * 60 * 60 * 24))
+while (day > answers.length) {
+  day -= answers.length
+}
+const answer = answers[day]
 
 class Tile {
   letter = ''
@@ -95,7 +101,10 @@ function completeRow() {
     // 3rd pass: mark absent
     currentRow.forEach((tile) => {
       if (!tile.state) {
-        tile.state = letterStates[tile.letter] = LetterState.ABSENT
+        tile.state = LetterState.ABSENT
+        if (!letterStates[tile.letter]) {
+          letterStates[tile.letter] = LetterState.ABSENT
+        }
       }
     })
 

@@ -1,5 +1,5 @@
 // copied from Wordle source
-const answers = [
+export const answers = [
   'cigar',
   'rebut',
   'sissy',
