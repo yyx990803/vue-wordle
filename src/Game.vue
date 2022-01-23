@@ -97,7 +97,8 @@ function completeRow() {
       showMessage(
         ['Genius', 'Magnificent', 'Impressive', 'Splendid', 'Great', 'Phew'][
           currentRowIndex
-        ]
+        ],
+        2000
       )
     } else if (currentRowIndex < board.length - 1) {
       // go the next row
@@ -105,7 +106,7 @@ function completeRow() {
     } else {
       // game over :(
       allowInput = false
-      showMessage(answer.toUpperCase())
+      showMessage(answer.toUpperCase(), -1)
     }
   } else {
     shake()
@@ -113,11 +114,13 @@ function completeRow() {
   }
 }
 
-function showMessage(msg: string) {
+function showMessage(msg: string, time = 1000) {
   message = msg
-  setTimeout(() => {
-    message = ''
-  }, 1000)
+  if (time > 0) {
+    setTimeout(() => {
+      message = ''
+    }, time)
+  }
 }
 
 function shake() {
@@ -234,7 +237,7 @@ function shake() {
 }
 .tile.filled .front {
   border-color: #999;
-  animation: zoom .2s;
+  animation: zoom 0.2s;
 }
 .tile:not(.empty) {
   border: none;
