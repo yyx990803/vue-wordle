@@ -109,22 +109,28 @@ function completeRow() {
       }
     })
 
+    allowInput = false
     if (currentRow.every((tile) => tile.state === LetterState.CORRECT)) {
       // yay!
-      allowInput = false
-      showMessage(
-        ['Genius', 'Magnificent', 'Impressive', 'Splendid', 'Great', 'Phew'][
-          currentRowIndex
-        ],
-        2000
-      )
+      setTimeout(() => {
+        showMessage(
+          ['Genius', 'Magnificent', 'Impressive', 'Splendid', 'Great', 'Phew'][
+            currentRowIndex
+          ],
+          2000
+        )
+      }, 1600)
     } else if (currentRowIndex < board.length - 1) {
       // go the next row
       currentRowIndex++
+      setTimeout(() => {
+        allowInput = true
+      }, 1600)
     } else {
       // game over :(
-      allowInput = false
-      showMessage(answer.toUpperCase(), -1)
+      setTimeout(() => {
+        showMessage(answer.toUpperCase(), -1)
+      }, 1600)
     }
   } else {
     shake()
@@ -176,12 +182,12 @@ function shake() {
           tile.state && 'revealed'
         ]"
       >
-        <div class="front" :style="{ transitionDelay: `${index * 200}ms` }">
+        <div class="front" :style="{ transitionDelay: `${index * 300}ms` }">
           {{ tile.letter }}
         </div>
         <div
           :class="['back', tile.state]"
-          :style="{ transitionDelay: `${index * 200}ms` }"
+          :style="{ transitionDelay: `${index * 300}ms` }"
         >
           {{ tile.letter }}
         </div>
@@ -255,7 +261,7 @@ function shake() {
   -webkit-backface-visibility: hidden;
 }
 .tile .front {
-  border: 2px solid #ccc;
+  border: 2px solid #d3d6da;
 }
 .tile .back {
   transform: rotateX(180deg);
