@@ -67,28 +67,36 @@ function clearTile() {
 
 function completeRow() {
   if (currentRow.every((tile) => tile.letter)) {
-    const word = currentRow.map((tile) => tile.letter).join('')
-    if (!allWords.includes(word) && word !== answer) {
+    const guess = currentRow.map((tile) => tile.letter).join('')
+    if (!allWords.includes(guess) && guess !== answer) {
       shake()
       showMessage(`Not in word list`)
       return
     }
 
     let correct = true
+    let answerLetters: (string | null)[] = answer.split('')
+    // first pass: mark correct ones
     currentRow.forEach((tile, i) => {
-      if (answer.includes(tile.letter)) {
-        if (answer[i] === tile.letter) {
-          tile.state = letterStates[tile.letter] = LetterState.CORRECT
-        } else {
+      if (answerLetters[i] === tile.letter) {
+        tile.state = letterStates[tile.letter] = LetterState.CORRECT
+        answerLetters[i] = null
+      }
+    })
+    // second pass: mark the rest
+    currentRow.forEach((tile, i) => {
+      if (answerLetters[i]) {
+        if (answerLetters.includes(tile.letter)) {
           tile.state = LetterState.PRESENT
+          answerLetters[i] = null
           if (!letterStates[tile.letter]) {
             letterStates[tile.letter] = LetterState.PRESENT
           }
           correct = false
+        } else {
+          tile.state = letterStates[tile.letter] = LetterState.ABSENT
+          correct = false
         }
-      } else {
-        tile.state = letterStates[tile.letter] = LetterState.ABSENT
-        correct = false
       }
     })
     if (correct) {
