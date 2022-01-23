@@ -18,6 +18,7 @@ const board = $ref(
   })
 )
 
+let message = $ref('')
 let allowInput = true
 let currentRowIndex = $ref(0)
 const currentRow = $computed(() => board[currentRowIndex])
@@ -67,7 +68,7 @@ function completeRow() {
   if (currentRow.every((tile) => tile.letter)) {
     const word = currentRow.map((tile) => tile.letter).join('')
     if (!allWords.includes(word) && word !== answer) {
-      alert(`"${word}" is not a valid word.`)
+      showMessage(`Not in word list`)
       return
     }
 
@@ -91,20 +92,36 @@ function completeRow() {
     if (correct) {
       // yay!
       allowInput = false
-      requestIdleCallback(() => alert('yay!'))
+      showMessage(
+        ['Genius', 'Magnificent', 'Impressive', 'Splendid', 'Great', 'Phew'][
+          currentRowIndex
+        ]
+      )
     } else if (currentRowIndex < board.length - 1) {
       // go the next row
       currentRowIndex++
     } else {
       // game over :(
       allowInput = false
-      requestIdleCallback(() => alert('oops'))
+      showMessage(answer.toUpperCase())
     }
+  } else {
+    showMessage('Not enough letters')
   }
+}
+
+function showMessage(msg: string) {
+  message = msg
+  setTimeout(() => {
+    message = ''
+  }, 1000)
 }
 </script>
 
 <template>
+  <Transition>
+    <div class="message" v-if="message">{{ message }}</div>
+  </Transition>
   <header>
     <h1>VVORDLE</h1>
     <a
@@ -149,6 +166,21 @@ function completeRow() {
   width: 350px;
   height: 420px;
   margin: 0px auto;
+}
+.message {
+  position: absolute;
+  left: 50%;
+  top: 80px;
+  color: #fff;
+  background-color: rgba(0, 0, 0, 0.85);
+  padding: 16px 20px;
+  z-index: 2;
+  border-radius: 8px;
+  transform: translateX(-50%);
+  transition: opacity 0.3s ease-out;
+}
+.message.v-leave-to {
+  opacity: 0;
 }
 .row {
   display: grid;
