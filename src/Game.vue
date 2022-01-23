@@ -198,7 +198,7 @@ function shake() {
   grid-gap: 5px;
   padding: 10px;
   box-sizing: border-box;
-  --height: min(420px, calc(var(--vh, 100vh) - 320px));
+  --height: min(420px, calc(var(--vh, 100vh) - 310px));
   height: var(--height);
   width: min(350px, calc(var(--height) / 6 * 5));
   margin: 0px auto;
@@ -208,12 +208,13 @@ function shake() {
   left: 50%;
   top: 80px;
   color: #fff;
-  background-color: rgba(0, 0, 0, 0.85);
+  background-color: black;
   padding: 16px 20px;
   z-index: 2;
-  border-radius: 8px;
+  border-radius: 4px;
   transform: translateX(-50%);
   transition: opacity 0.3s ease-out;
+  font-weight: 600;
 }
 .message.v-leave-to {
   opacity: 0;
