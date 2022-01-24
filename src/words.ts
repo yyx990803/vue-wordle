@@ -1,14 +1,18 @@
+const defaultMessage = ' Using word of the day instead.'
+
 export function getWordOfTheDay() {
   if (location.search) {
     try {
-     const query = atob(location.search.slice(1))
-     if (query.length !== 5) {
-      alert('incorrect word length from encoded query.')
-     } else {
-       return query
-     }
+      const query = atob(location.search.slice(1))
+      if (query.length !== 5) {
+        alert(`Incorrect word length from encoded query. ${defaultMessage}`)
+      } else if (!allWords.includes(query)) {
+        alert(`Encoded query is not in the word list. ${defaultMessage}`)
+      } else {
+        return query
+      }
     } catch (e) {
-      alert('malformed encoded word query.')
+      alert(`Malformed encoded word query. ${defaultMessage}`)
     }
   }
 
