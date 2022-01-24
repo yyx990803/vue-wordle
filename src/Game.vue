@@ -23,6 +23,7 @@ const currentRow = $computed(() => board[currentRowIndex])
 
 // Feedback state: message and shake
 let message = $ref('')
+let grid = $ref('')
 let shakeRowIndex = $ref(-1)
 
 // Keep track of revealed letters for the virtual keyboard
@@ -109,11 +110,12 @@ function completeRow() {
     if (currentRow.every((tile) => tile.state === LetterState.CORRECT)) {
       // yay!
       setTimeout(() => {
+        grid = genResultGrid()
         showMessage(
           ['Genius', 'Magnificent', 'Impressive', 'Splendid', 'Great', 'Phew'][
             currentRowIndex
           ],
-          2000
+          -1
         )
       }, 1600)
     } else if (currentRowIndex < board.length - 1) {
@@ -149,11 +151,30 @@ function shake() {
     shakeRowIndex = -1
   }, 1000)
 }
+
+const icons = {
+  [LetterState.CORRECT]: '🟩',
+  [LetterState.PRESENT]: '🟨',
+  [LetterState.ABSENT]: '⬜',
+  [LetterState.INITIAL]: null
+}
+
+function genResultGrid() {
+  return board
+    .slice(0, currentRowIndex + 1)
+    .map((row) => {
+      return row.map((tile) => icons[tile.state]).join('')
+    })
+    .join('\n')
+}
 </script>
 
 <template>
   <Transition>
-    <div class="message" v-if="message">{{ message }}</div>
+    <div class="message" v-if="message">
+      {{ message }}
+      <pre v-if="grid">{{ grid }}</pre>
+    </div>
   </Transition>
   <header>
     <h1>VVORDLE</h1>
@@ -205,7 +226,7 @@ function shake() {
   left: 50%;
   top: 80px;
   color: #fff;
-  background-color: black;
+  background-color: rgba(0, 0, 0, 0.85);
   padding: 16px 20px;
   z-index: 2;
   border-radius: 4px;

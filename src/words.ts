@@ -1,4 +1,17 @@
 export function getWordOfTheDay() {
+  if (location.search) {
+    try {
+     const query = atob(location.search.slice(1))
+     if (query.length !== 5) {
+      alert('incorrect word length from encoded query.')
+     } else {
+       return query
+     }
+    } catch (e) {
+      alert('malformed encoded word query.')
+    }
+  }
+
   const now = new Date()
   const start = new Date(2022, 0, 0)
   const diff = Number(now) - Number(start)
