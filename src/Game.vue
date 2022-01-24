@@ -166,17 +166,12 @@ function shake() {
   </header>
   <div id="board">
     <div
-      class="row"
       v-for="(row, index) in board"
-      :class="{ shake: shakeRowIndex === index }"
+      :class="['row', shakeRowIndex === index && 'shake']"
     >
       <div
         v-for="(tile, index) in row"
-        :class="[
-          'tile',
-          tile.letter ? 'filled' : 'empty',
-          tile.state && 'revealed'
-        ]"
+        :class="['tile', tile.letter && 'filled', tile.state && 'revealed']"
       >
         <div class="front" :style="{ transitionDelay: `${index * 300}ms` }">
           {{ tile.letter }}
@@ -236,10 +231,8 @@ function shake() {
   user-select: none;
   position: relative;
 }
-@media (max-height: 680px) {
-  .tile {
-    font-size: 3vh;
-  }
+.tile.filled {
+  animation: zoom 0.2s;
 }
 .tile .front,
 .tile .back {
@@ -259,17 +252,11 @@ function shake() {
 .tile .front {
   border: 2px solid #d3d6da;
 }
-.tile .back {
-  transform: rotateX(180deg);
-}
 .tile.filled .front {
   border-color: #999;
 }
-.tile.filled {
-  animation: zoom 0.2s;
-}
-.tile:not(.empty) {
-  border: none;
+.tile .back {
+  transform: rotateX(180deg);
 }
 .tile.revealed .front {
   transform: rotateX(180deg);
@@ -324,6 +311,12 @@ function shake() {
   }
   100% {
     transform: translate(1px);
+  }
+}
+
+@media (max-height: 680px) {
+  .tile {
+    font-size: 3vh;
   }
 }
 </style>
