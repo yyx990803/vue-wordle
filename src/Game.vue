@@ -1,39 +1,35 @@
 <script setup lang="ts">
 import { onUnmounted } from 'vue'
-import { answers, allWords } from './words'
+import { getWordOfTheDay, allWords } from './words'
 import Keyboard from './Keyboard.vue'
 import { LetterState } from './types'
 
-// get word of the day
-const now = new Date()
-const start = new Date(2022, 0, 0)
-const diff = Number(now) - Number(start)
-let day = Math.floor(diff / (1000 * 60 * 60 * 24))
-while (day > answers.length) {
-  day -= answers.length
-}
-const answer = answers[day]
+// Get word of the day
+const answer = getWordOfTheDay()
 
-// board state
-class Tile {
-  letter = ''
-  state = LetterState.INITIAL
-}
-
+// Board state. Each tile is represented as { letter, state }
 const board = $ref(
-  Array.from({ length: 6 }, () => {
-    return Array.from({ length: 5 }, () => new Tile())
-  })
+  Array.from({ length: 6 }, () =>
+    Array.from({ length: 5 }, () => ({
+      letter: '',
+      state: LetterState.INITIAL
+    }))
+  )
 )
 
-let message = $ref('')
-let allowInput = true
+// Current active row.
 let currentRowIndex = $ref(0)
-let shakeRowIndex = $ref(-1)
 const currentRow = $computed(() => board[currentRowIndex])
 
-// keep track of revealed letter state for the keyboard
+// Feedback state: message and shake
+let message = $ref('')
+let shakeRowIndex = $ref(-1)
+
+// Keep track of revealed letters for the virtual keyboard
 const letterStates: Record<string, LetterState> = $ref({})
+
+// Handle keyboard input.
+let allowInput = true
 
 const onKeyup = (e: KeyboardEvent) => onKey(e.key)
 
@@ -45,8 +41,8 @@ onUnmounted(() => {
 
 function onKey(key: string) {
   if (!allowInput) return
-  if (/^[a-z]$/.test(key)) {
-    fillTile(key)
+  if (/^[a-zA-Z]$/.test(key)) {
+    fillTile(key.toLowerCase())
   } else if (key === 'Backspace') {
     clearTile()
   } else if (key === 'Enter') {
