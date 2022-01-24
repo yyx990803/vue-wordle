@@ -5,6 +5,10 @@ defineProps<{
   letterStates: Record<string, LetterState>
 }>()
 
+defineEmits<{
+  (e: 'key', key: string): void
+}>()
+
 const rows = [
   'qwertyuiop'.split(''),
   'asdfghjkl'.split(''),
@@ -72,7 +76,7 @@ button {
   align-items: center;
   text-transform: uppercase;
   -webkit-tap-highlight-color: rgba(0, 0, 0, 0.3);
-  transition: all .2s 1.5s;
+  transition: all 0.2s 1.5s;
 }
 button:last-of-type {
   margin: 0;
