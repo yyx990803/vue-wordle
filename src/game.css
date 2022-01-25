@@ -30,6 +30,8 @@ header {
 
 .correct {
   background-color: #6aaa64 !important;
+  outline: 1px solid currentColor;
+  outline-offset: -4px;
 }
 
 .present {
