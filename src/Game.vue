@@ -25,6 +25,7 @@ const currentRow = $computed(() => board[currentRowIndex])
 let message = $ref('')
 let grid = $ref('')
 let shakeRowIndex = $ref(-1)
+let success = $ref(false)
 
 // Keep track of revealed letters for the virtual keyboard
 const letterStates: Record<string, LetterState> = $ref({})
@@ -117,6 +118,7 @@ function completeRow() {
           ],
           -1
         )
+        success = true
       }, 1600)
     } else if (currentRowIndex < board.length - 1) {
       // go the next row
@@ -188,7 +190,11 @@ function genResultGrid() {
   <div id="board">
     <div
       v-for="(row, index) in board"
-      :class="['row', shakeRowIndex === index && 'shake']"
+      :class="[
+        'row',
+        shakeRowIndex === index && 'shake',
+        success && currentRowIndex === index && 'jump'
+      ]"
     >
       <div
         v-for="(tile, index) in row"
@@ -199,7 +205,10 @@ function genResultGrid() {
         </div>
         <div
           :class="['back', tile.state]"
-          :style="{ transitionDelay: `${index * 300}ms` }"
+          :style="{
+            transitionDelay: `${index * 300}ms`,
+            animationDelay: `${index * 100}ms`
+          }"
         >
           {{ tile.letter }}
         </div>
@@ -332,6 +341,28 @@ function genResultGrid() {
   }
   100% {
     transform: translate(1px);
+  }
+}
+
+.jump .tile .back {
+  animation: jump 0.5s;
+}
+
+@keyframes jump {
+  0% {
+    transform: translateY(0px);
+  }
+  20% {
+    transform: translateY(5px);
+  }
+  60% {
+    transform: translateY(-25px);
+  }
+  90% {
+    transform: translateY(3px);
+  }
+  100% {
+    transform: translateY(0px);
   }
 }
 
