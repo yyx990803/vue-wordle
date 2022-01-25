@@ -6,8 +6,6 @@ export function getWordOfTheDay() {
       const query = atob(location.search.slice(1))
       if (query.length !== 5) {
         alert(`Incorrect word length from encoded query. ${defaultMessage}`)
-      } else if (!allWords.includes(query)) {
-        alert(`Encoded query is not in the word list. ${defaultMessage}`)
       } else {
         return query
       }
