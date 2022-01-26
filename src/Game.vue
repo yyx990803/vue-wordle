@@ -189,7 +189,7 @@ function genResultGrid() {
   </header>
   <div id="board">
     <div
-      v-for="(row, index) in board"
+      v-for="(row, index) in board" :key="index"
       :class="[
         'row',
         shakeRowIndex === index && 'shake',
@@ -199,6 +199,7 @@ function genResultGrid() {
       <div
         v-for="(tile, index) in row"
         :class="['tile', tile.letter && 'filled', tile.state && 'revealed']"
+        :key="index"
       >
         <div class="front" :style="{ transitionDelay: `${index * 300}ms` }">
           {{ tile.letter }}
