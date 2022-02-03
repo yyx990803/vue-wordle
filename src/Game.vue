@@ -1,16 +1,28 @@
 <script setup lang="ts">
 import { onUnmounted } from 'vue'
-import { getWordOfTheDay, allWords } from './words'
+import { getWord, getAllWords } from './words'
 import Keyboard from './Keyboard.vue'
 import { LetterState } from './types'
 
 // Get word of the day
-const answer = getWordOfTheDay()
+const random = getRandomInt(3,5);
 
-// Board state. Each tile is represented as { letter, state }
+const answer = getWord(random);
+const allWords = getAllWords(random);
+setBoardStyle(random);
+
+function getRandomInt(min, max) {
+  min = Math.ceil(min);
+  return Math.floor(Math.random() * (Math.floor(max) - min) + min);
+}
+
+function setBoardStyle(length) {
+  document.documentElement.style.setProperty('--length', length);
+}
+
 const board = $ref(
   Array.from({ length: 6 }, () =>
-    Array.from({ length: 5 }, () => ({
+    Array.from({ length: random }, () => ({
       letter: '',
       state: LetterState.INITIAL
     }))
@@ -179,14 +191,9 @@ function genResultGrid() {
     </div>
   </Transition>
   <header>
-    <h1>VVORDLE</h1>
-    <a
-      id="source-link"
-      href="https://github.com/yyx990803/vue-wordle"
-      target="_blank"
-      >Source</a
-    >
+    <h1>JLavs Words</h1>
   </header>
+  <h2>Word length: {{ random }}</h2>
   <div id="board">
     <div
       v-for="(row, index) in board"
@@ -219,6 +226,10 @@ function genResultGrid() {
 </template>
 
 <style scoped>
+:root {
+  --length: 5
+}
+
 #board {
   display: grid;
   grid-template-rows: repeat(6, 1fr);
@@ -227,9 +238,10 @@ function genResultGrid() {
   box-sizing: border-box;
   --height: min(420px, calc(var(--vh, 100vh) - 310px));
   height: var(--height);
-  width: min(350px, calc(var(--height) / 6 * 5));
+  width: min(350px, calc(var(--height) / 7 * 6));
   margin: 0px auto;
 }
+
 .message {
   position: absolute;
   left: 50%;
@@ -248,7 +260,7 @@ function genResultGrid() {
 }
 .row {
   display: grid;
-  grid-template-columns: repeat(5, 1fr);
+  grid-template-columns: repeat(var(--length), 1fr);
   grid-gap: 5px;
 }
 .tile {
