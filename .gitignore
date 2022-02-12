@@ -3,3 +3,6 @@ node_modules
 dist
 dist-ssr
 *.local
+words.txt
+words-script.js
+s3upload.sh

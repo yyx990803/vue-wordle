@@ -1,51 +1,30 @@
 <script setup lang="ts">
 import { onUnmounted } from 'vue'
-import { getWord, getAllWords } from './words'
+import { setup } from './setup'
 import Keyboard from './Keyboard.vue'
 import { LetterState } from './types'
 
-// Get word of the day
-const random = getRandomInt(3,5);
-
-const answer = getWord(random);
-const allWords = getAllWords(random);
-setBoardStyle(random);
-
-function getRandomInt(min, max) {
-  min = Math.ceil(min);
-  return Math.floor(Math.random() * (Math.floor(max) - min) + min);
-}
-
-function setBoardStyle(length) {
-  document.documentElement.style.setProperty('--length', length);
-}
-
-const board = $ref(
-  Array.from({ length: 6 }, () =>
-    Array.from({ length: random }, () => ({
-      letter: '',
-      state: LetterState.INITIAL
-    }))
-  )
-)
-
-// Current active row.
-let currentRowIndex = $ref(0)
-const currentRow = $computed(() => board[currentRowIndex])
+var word;
+var answers;
+var length;
+var allowedGuesses;
+var board = $ref([]);
 
 // Feedback state: message and shake
-let message = $ref('')
-let grid = $ref('')
-let shakeRowIndex = $ref(-1)
-let success = $ref(false)
+var message = $ref('')
+var grid = $ref('')
+var shakeRowIndex = $ref(-1)
+var success = $ref(false)
+
+var currentRowIndex = $ref(0);
+
+let allowInput = true
+let gameOver = $ref(false);
+
+const onKeyup = (e: KeyboardEvent) => onKey(e.key)
 
 // Keep track of revealed letters for the virtual keyboard
 const letterStates: Record<string, LetterState> = $ref({})
-
-// Handle keyboard input.
-let allowInput = true
-
-const onKeyup = (e: KeyboardEvent) => onKey(e.key)
 
 window.addEventListener('keyup', onKeyup)
 
@@ -53,6 +32,33 @@ onUnmounted(() => {
   window.removeEventListener('keyup', onKeyup)
 })
 
+play();
+
+function play() {
+  ({ word, answers, length, allowedGuesses } = setup());
+  
+  board = Array.from({ length: 6 }, () =>
+    Array.from({ length }, () => ({
+      letter: '',
+      state: LetterState.INITIAL
+    }))
+  )
+
+  message = ''
+  currentRowIndex = 0
+  success = false
+  shakeRowIndex = -1
+  grid = ''
+  allowInput = true;
+  gameOver = false;
+  letterStates = {};
+}
+
+// Current active row.
+const currentRow = $computed(() => board[currentRowIndex])
+
+
+// Handle keyboard input.
 function onKey(key: string) {
   if (!allowInput) return
   if (/^[a-zA-Z]$/.test(key)) {
@@ -85,22 +91,20 @@ function clearTile() {
 function completeRow() {
   if (currentRow.every((tile) => tile.letter)) {
     const guess = currentRow.map((tile) => tile.letter).join('')
-    if (!allWords.includes(guess) && guess !== answer) {
+    if (!allowedGuesses.includes(guess) && guess !== word) {
       shake()
       showMessage(`Not in word list`)
       return
     }
 
-    const answerLetters: (string | null)[] = answer.split('')
+    const answerLetters: (string | null)[] = word.split('')
     // first pass: mark correct ones
     currentRow.forEach((tile, i) => {
       if (answerLetters[i] === tile.letter) {
         tile.state = letterStates[tile.letter] = LetterState.CORRECT
         answerLetters[i] = null
       }
-    })
-    // second pass: mark the present
-    currentRow.forEach((tile) => {
+
       if (!tile.state && answerLetters.includes(tile.letter)) {
         tile.state = LetterState.PRESENT
         answerLetters[answerLetters.indexOf(tile.letter)] = null
@@ -108,9 +112,7 @@ function completeRow() {
           letterStates[tile.letter] = LetterState.PRESENT
         }
       }
-    })
-    // 3rd pass: mark absent
-    currentRow.forEach((tile) => {
+
       if (!tile.state) {
         tile.state = LetterState.ABSENT
         if (!letterStates[tile.letter]) {
@@ -124,6 +126,7 @@ function completeRow() {
       // yay!
       setTimeout(() => {
         grid = genResultGrid()
+        gameOver = true;
         showMessage(
           ['Genius', 'Magnificent', 'Impressive', 'Splendid', 'Great', 'Phew'][
             currentRowIndex
@@ -140,8 +143,9 @@ function completeRow() {
       }, 1600)
     } else {
       // game over :(
+      gameOver = true;
       setTimeout(() => {
-        showMessage(answer.toUpperCase(), -1)
+        showMessage(word.toUpperCase(), -1)
       }, 1600)
     }
   } else {
@@ -187,13 +191,17 @@ function genResultGrid() {
   <Transition>
     <div class="message" v-if="message">
       {{ message }}
-      <pre v-if="grid">{{ grid }}</pre>
+      <pre v-if="grid">{{ grid }}</pre><br>
+      <p><button @click="play()" 
+        v-if="gameOver" 
+        style="background:white;color:black;border:1px solid black;font-size:15px;padding:10px;">
+      Play again</button></p>
     </div>
   </Transition>
   <header>
     <h1>JLavs Words</h1>
   </header>
-  <h2>Word length: {{ random }}</h2>
+  <h3>Word length: {{ length }}</h3>
   <div id="board">
     <div
       v-for="(row, index) in board"
@@ -292,10 +300,10 @@ function genResultGrid() {
   -webkit-backface-visibility: hidden;
 }
 .tile .front {
-  border: 2px solid #d3d6da;
+  border: 2px solid gray;
 }
 .tile.filled .front {
-  border-color: #999;
+  border-color: black;
 }
 .tile .back {
   transform: rotateX(180deg);
