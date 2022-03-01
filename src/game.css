@@ -1,3 +1,9 @@
+:root {
+  --correct: #6aaa64;
+  --present: #c9b458;
+  --absent: #787c7e;
+}
+
 body {
   font-family: 'Clear Sans', 'Helvetica Neue', Arial, sans-serif;
   text-align: center;
@@ -29,13 +35,13 @@ header {
 }
 
 .correct {
-  background-color: #6aaa64 !important;
+  background-color: var(--correct) !important;
 }
 
 .present {
-  background-color: #c9b458 !important;
+  background-color: var(--present) !important;
 }
 
 .absent {
-  background-color: #787c7e !important;
+  background-color: var(--absent) !important;
 }
