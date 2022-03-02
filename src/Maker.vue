@@ -11,9 +11,18 @@
       <p>
         <a :href="link">{{ link }}</a>
       </p>
-      <p><input type="submit" value="COPY" /></p>
+      <p>
+        <input
+          type="text"
+          readonly
+          :value="link"
+          ref="copyLink"
+          class="linkBox"
+        />
+
+        <input type="submit" value="COPY" />
+      </p>
     </div>
-    <input type="text" readonly :value="link" ref="copyLink" hidden />
   </form>
 </template>
 
@@ -75,5 +84,11 @@ function showMessage(msg: string, time = 1000) {
 form#maker {
   flex: 1;
   margin-top: 10%;
+}
+
+.linkBox {
+  width: 40ch;
+  max-width: 100%;
+  margin-right: 1ch;
 }
 </style>
