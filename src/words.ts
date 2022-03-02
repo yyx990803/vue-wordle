@@ -52,5 +52,5 @@ export function normaliseWord(word: string) {
 export function recreateGameId(word: string, sender: string | null) {
   if (!sender) sender = ""
   word = normaliseWord(word)
-  return btoa(sender + word)
+  return btoa(sender + word).replace(/=*$/, "")
 }
