@@ -7,10 +7,8 @@ on:
       - synchronize
       - closed
     paths:
-      - css/**
-      - html/**
-      - js/**
-      - build.js
+      - src/**
+      - vite.config.js
       - .github/workflows/preview.yml
 concurrency: preview-${{ github.ref }}
 jobs:
