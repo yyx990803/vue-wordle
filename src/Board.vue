@@ -219,16 +219,19 @@ function completeRow() {
 </script>
 
 <style scoped>
+p {
+  margin: 0;
+}
+
 #board {
   display: grid;
   grid-template-rows: repeat(6, 1fr);
   grid-gap: 5px;
   padding: 10px;
   box-sizing: border-box;
-  --height: min(420px, calc(var(--vh, 100vh) - 310px));
-  height: var(--height);
-  width: min(350px, calc(var(--height) / 6 * 5));
+  width: min(70%, 90vw);
   margin: 0px auto;
+  flex: 1;
 }
 
 .row {
