@@ -1,8 +1,7 @@
 <template>
   <Message :message="message"></Message>
-  <p v-if="sender">{{ sender }} has sent you a Curdle!</p>
-  <p v-else>You've received a Curdle!</p>
-  <p>{{ indication }}</p>
+  <p>{{ sender ? sender : "Someone" }} has sent you a Curdle!</p>
+  <p>{{ indications[indicator] }}</p>
   <div id="board">
     <div
       v-for="(row, index) in board"
@@ -39,7 +38,7 @@ import { onUnmounted } from "vue"
 import { LetterState } from "./types"
 import Message from "./Message.vue"
 import Keyboard from "./Keyboard.vue"
-import { wordInDictionary } from "./words"
+import { getWordOfTheDay, wordInDictionary, indications } from "./words"
 
 const props = defineProps({
   answer: {
@@ -47,6 +46,8 @@ const props = defineProps({
     required: true,
   },
 })
+
+const { sender, indicator } = getWordOfTheDay()
 
 // Board state. Each tile is represented as { letter, state }
 const board = $ref(

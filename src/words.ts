@@ -6,11 +6,12 @@ type GameInfo = {
   indicator: keyof typeof indications | null
 }
 
-const indications = {
-  common: "✅ This word is in the dictionary.",
-  extended: "⚠️ This word is in the extended dictionary.",
-  unknown: "❔ Word is not in dictionary (all guesses are allowed)",
+export const indications = {
+  common: "📗✔️ This word is in the dictionary",
+  extended: "📚✔️ This word is in the extended dictionary",
+  unknown: "📚❌ This word is not in the dictionary (all guesses are allowed)",
   invalid: "❌ Invalid link",
+  notEnoughLetters: "🔠 Not enough letters",
 }
 
 const nullGame = { word: null, sender: null, indicator: null }
@@ -33,6 +34,7 @@ export function getWordOfTheDay(): GameInfo {
 }
 
 export function wordInDictionary(word: string): keyof typeof indications {
+  word = word.toLowerCase().trim()
   if (dictionary.common.includes(word)) return "common"
   if (dictionary.extended.includes(word)) return "extended"
   return "unknown"
