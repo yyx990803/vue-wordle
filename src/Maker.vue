@@ -13,6 +13,7 @@
       </p>
       <p><input type="submit" value="COPY" /></p>
     </div>
+    <input type="text" readonly :value="link" ref="copyLink" hidden />
   </form>
 </template>
 
@@ -25,6 +26,7 @@ import {
   wordInDictionary,
 } from "./words"
 
+const copyLink = $ref<HTMLInputElement>()
 let word = $ref("")
 let indication = $ref("")
 let sender = $ref("")
@@ -45,8 +47,11 @@ let gameId = $computed(() => {
 })
 
 function copyLinkToClipboard(event: Event) {
-  navigator.clipboard.writeText(link)
+  copyLink.focus()
+  copyLink.select()
+  document.execCommand("copy")
   showMessage("Copied!")
+  // Block default submit action (navigation)
   event.preventDefault()
 }
 
