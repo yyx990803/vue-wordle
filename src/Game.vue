@@ -179,13 +179,8 @@ function genResultGrid() {
     </div>
   </Transition>
   <header>
-    <h1>VVORDLE</h1>
-    <a
-      id="source-link"
-      href="https://github.com/yyx990803/vue-wordle"
-      target="_blank"
-      >Source</a
-    >
+    <h1>CURDLE</h1>
+    <h2><span>cu</span>stom wo<span>rdle</span></h2>
   </header>
   <div id="board">
     <div

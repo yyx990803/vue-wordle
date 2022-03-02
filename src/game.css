@@ -11,9 +11,19 @@ body {
   margin: 0px auto;
 }
 
-h1 {
+h1, h2 {
   margin: 4px 0;
+}
+
+h1 {
   font-size: 36px;
+}
+
+h2 {
+  color: var(--present);
+}
+h2 span {
+  color: var(--correct);
 }
 
 header {
