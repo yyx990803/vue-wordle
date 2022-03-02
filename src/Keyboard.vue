@@ -1,18 +1,18 @@
 <script setup lang="ts">
-import { LetterState } from './types'
+import { LetterState } from "./types"
 
 defineProps<{
   letterStates: Record<string, LetterState>
 }>()
 
 defineEmits<{
-  (e: 'key', key: string): void
+  (e: "key", key: string): void
 }>()
 
 const rows = [
-  'qwertyuiop'.split(''),
-  'asdfghjkl'.split(''),
-  ['Enter', ...'zxcvbnm'.split(''), 'Backspace']
+  "qwertyuiop".split(""),
+  "asdfghjkl".split(""),
+  ["Enter", ..."zxcvbnm".split(""), "Backspace"],
 ]
 </script>
 
@@ -46,7 +46,7 @@ const rows = [
 
 <style scoped>
 #keyboard {
-  margin: 30px 8px 0;
+  margin: 0 2px;
   user-select: none;
 }
 .row {
