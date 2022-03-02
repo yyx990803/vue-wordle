@@ -28,7 +28,9 @@ export function getWordOfTheDay(): GameInfo {
     return { ...nullGame, indicator: "invalid" }
   }
 
-  const [sender, word] = [decodedGameId.slice(0, -5), decodedGameId.slice(-5)]
+  let [sender, word] = [decodedGameId.slice(0, -5), decodedGameId.slice(-5)]
+  word = word.toUpperCase().replaceAll(/[^A-Z]/g, "")
+  if (word.length !== 5) return { word, sender, indicator: "invalid" }
 
   return { word, sender, indicator: wordInDictionary(word) }
 }

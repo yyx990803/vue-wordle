@@ -2,7 +2,7 @@
   <Message :message="message"></Message>
   <p>{{ sender ? sender : "Someone" }} has sent you a Curdle!</p>
   <p>{{ indications[indicator] }}</p>
-  <div id="board">
+  <div id="board" v-if="indicator !== 'invalid'">
     <div
       v-for="(row, index) in board"
       :class="[
