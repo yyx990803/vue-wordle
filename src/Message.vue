@@ -2,7 +2,7 @@
   <Transition>
     <div class="message" v-if="message">
       <p>{{ copied ? "Copied results to clipboard" : message }}</p>
-      <p v-show="copied">
+      <p v-if="paste">
         <textarea readonly ref="textarea">{{ paste }}</textarea>
       </p>
       <button v-if="paste" @click="copyPaste">Share</button>
@@ -22,10 +22,10 @@ const props = defineProps({
 
 let copied = $ref(false)
 function copyPaste() {
-  copied = true
-  navigator.clipboard.writeText(props.paste!)
   textarea.focus()
-  nextTick().then(() => textarea.select())
+  textarea.select()
+  document.execCommand("copy")
+  copied = true
 }
 </script>
 
