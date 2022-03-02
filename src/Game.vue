@@ -1,18 +1,19 @@
 <script setup lang="ts">
-import { onUnmounted } from 'vue'
-import { getWordOfTheDay, allWords } from './words'
-import Keyboard from './Keyboard.vue'
-import { LetterState } from './types'
+import { onUnmounted } from "vue"
+import { getWordOfTheDay, wordInDictionary } from "./words"
+import Keyboard from "./Keyboard.vue"
+import { LetterState } from "./types"
 
-// Get word of the day
-const answer = getWordOfTheDay()
+const { word, sender } = getWordOfTheDay()
+let answer: string
+if (word == null) answer = ""
 
 // Board state. Each tile is represented as { letter, state }
 const board = $ref(
   Array.from({ length: 6 }, () =>
     Array.from({ length: 5 }, () => ({
-      letter: '',
-      state: LetterState.INITIAL
+      letter: "",
+      state: LetterState.INITIAL,
     }))
   )
 )
@@ -22,8 +23,8 @@ let currentRowIndex = $ref(0)
 const currentRow = $computed(() => board[currentRowIndex])
 
 // Feedback state: message and shake
-let message = $ref('')
-let grid = $ref('')
+let message = $ref("")
+let grid = $ref("")
 let shakeRowIndex = $ref(-1)
 let success = $ref(false)
 
@@ -35,19 +36,19 @@ let allowInput = true
 
 const onKeyup = (e: KeyboardEvent) => onKey(e.key)
 
-window.addEventListener('keyup', onKeyup)
+window.addEventListener("keyup", onKeyup)
 
 onUnmounted(() => {
-  window.removeEventListener('keyup', onKeyup)
+  window.removeEventListener("keyup", onKeyup)
 })
 
 function onKey(key: string) {
   if (!allowInput) return
   if (/^[a-zA-Z]$/.test(key)) {
     fillTile(key.toLowerCase())
-  } else if (key === 'Backspace') {
+  } else if (key === "Backspace") {
     clearTile()
-  } else if (key === 'Enter') {
+  } else if (key === "Enter") {
     completeRow()
   }
 }
@@ -64,7 +65,7 @@ function fillTile(letter: string) {
 function clearTile() {
   for (const tile of [...currentRow].reverse()) {
     if (tile.letter) {
-      tile.letter = ''
+      tile.letter = ""
       break
     }
   }
@@ -72,14 +73,21 @@ function clearTile() {
 
 function completeRow() {
   if (currentRow.every((tile) => tile.letter)) {
-    const guess = currentRow.map((tile) => tile.letter).join('')
-    if (!allWords.includes(guess) && guess !== answer) {
+    const guess = currentRow.map((tile) => tile.letter).join("")
+    if (
+      // If the guess is the answer, it must be allowed
+      guess !== answer &&
+      // Disallow a word that's not in the dictionary
+      wordInDictionary(guess) === "unknown" &&
+      // ...unless the answer is also not in the dictionary
+      wordInDictionary(answer) !== "unknown"
+    ) {
       shake()
-      showMessage(`Not in word list`)
+      showMessage("Word not in dictionary")
       return
     }
 
-    const answerLetters: (string | null)[] = answer.split('')
+    const answerLetters: (string | null)[] = answer.split("")
     // first pass: mark correct ones
     currentRow.forEach((tile, i) => {
       if (answerLetters[i] === tile.letter) {
@@ -113,7 +121,7 @@ function completeRow() {
       setTimeout(() => {
         grid = genResultGrid()
         showMessage(
-          ['Genius', 'Magnificent', 'Impressive', 'Splendid', 'Great', 'Phew'][
+          ["Genius", "Magnificent", "Impressive", "Splendid", "Great", "Phew"][
             currentRowIndex
           ],
           -1
@@ -134,7 +142,7 @@ function completeRow() {
     }
   } else {
     shake()
-    showMessage('Not enough letters')
+    showMessage("Not enough letters")
   }
 }
 
@@ -142,7 +150,7 @@ function showMessage(msg: string, time = 1000) {
   message = msg
   if (time > 0) {
     setTimeout(() => {
-      message = ''
+      message = ""
     }, time)
   }
 }
@@ -155,19 +163,19 @@ function shake() {
 }
 
 const icons = {
-  [LetterState.CORRECT]: '🟩',
-  [LetterState.PRESENT]: '🟨',
-  [LetterState.ABSENT]: '⬜',
-  [LetterState.INITIAL]: null
+  [LetterState.CORRECT]: "🟩",
+  [LetterState.PRESENT]: "🟨",
+  [LetterState.ABSENT]: "⬜",
+  [LetterState.INITIAL]: null,
 }
 
 function genResultGrid() {
   return board
     .slice(0, currentRowIndex + 1)
     .map((row) => {
-      return row.map((tile) => icons[tile.state]).join('')
+      return row.map((tile) => icons[tile.state]).join("")
     })
-    .join('\n')
+    .join("\n")
 }
 </script>
 
@@ -188,7 +196,7 @@ function genResultGrid() {
       :class="[
         'row',
         shakeRowIndex === index && 'shake',
-        success && currentRowIndex === index && 'jump'
+        success && currentRowIndex === index && 'jump',
       ]"
     >
       <div
@@ -202,7 +210,7 @@ function genResultGrid() {
           :class="['back', tile.state]"
           :style="{
             transitionDelay: `${index * 300}ms`,
-            animationDelay: `${index * 100}ms`
+            animationDelay: `${index * 100}ms`,
           }"
         >
           {{ tile.letter }}
