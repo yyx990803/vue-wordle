@@ -4,13 +4,14 @@ import Maker from "./Maker.vue"
 import Board from "./Board.vue"
 
 const { word } = getWordOfTheDay()
+const baseUrl = location.origin + location.pathname
 </script>
 
 <template>
   <header>
     <h1>CURDLE</h1>
     <h2><span>cu</span>stom wo<span>rdle</span></h2>
-    <a v-if="word" id="source-link" href="/">New</a>
+    <a v-if="word" id="source-link" :href="baseUrl">New</a>
   </header>
   <Board v-if="word" :answer="word"></Board>
   <Maker v-else></Maker>
