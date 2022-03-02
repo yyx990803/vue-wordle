@@ -18,7 +18,12 @@
 
 <script setup lang="ts">
 import Message from "./Message.vue"
-import { indications, wordInDictionary } from "./words"
+import {
+  indications,
+  normaliseWord,
+  recreateGameId,
+  wordInDictionary,
+} from "./words"
 
 let word = $ref("")
 let indication = $ref("")
@@ -30,15 +35,13 @@ let link = $computed(
 )
 
 let gameId = $computed(() => {
-  word = word.toUpperCase()
-  word = word.replaceAll(/[^A-Z]/g, "")
+  word = normaliseWord(word)
   if (word.length < 5) {
     indication = indications.notEnoughLetters
     return ""
   }
-  if (word.length > 5) word = word.slice(0, 5)
   indication = indications[wordInDictionary(word)]
-  return btoa(sender + word)
+  return recreateGameId(word, sender)
 })
 
 function copyLinkToClipboard(event: Event) {

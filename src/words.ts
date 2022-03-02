@@ -41,3 +41,16 @@ export function wordInDictionary(word: string): keyof typeof indications {
   if (dictionary.extended.includes(word)) return "extended"
   return "unknown"
 }
+
+export function normaliseWord(word: string) {
+  word = word.toUpperCase()
+  word = word.replaceAll(/[^A-Z]/g, "")
+  if (word.length > 5) word = word.slice(0, 5)
+  return word
+}
+
+export function recreateGameId(word: string, sender: string | null) {
+  if (!sender) sender = ""
+  word = normaliseWord(word)
+  return btoa(sender + word)
+}
