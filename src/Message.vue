@@ -1,15 +1,24 @@
 <template>
   <Transition>
     <div class="message" v-if="message">
-      {{ message }}
+      <p>{{ copied ? "Copied results to clipboard" : message }}</p>
+
+      <button v-if="paste" @click="copyPaste">Share</button>
     </div>
   </Transition>
 </template>
 
 <script setup lang="ts">
-defineProps({
-  message: String,
+const props = defineProps({
+  message: { type: String, required: true },
+  paste: String,
 })
+
+let copied = $ref(false)
+function copyPaste() {
+  navigator.clipboard.writeText(props.paste!)
+  copied = true
+}
 </script>
 
 <style scoped>

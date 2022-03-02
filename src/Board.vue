@@ -1,5 +1,5 @@
 <template>
-  <Message :message="message"></Message>
+  <Message :message="message" :paste="sharePaste"></Message>
   <p>{{ sender ? sender : "Someone" }} has sent you a Curdle!</p>
   <p>{{ indications[indicator] }}</p>
   <div id="board" v-if="indicator !== 'invalid'">
