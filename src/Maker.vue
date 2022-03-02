@@ -1,7 +1,6 @@
 <template>
   <Message :message="message"></Message>
-  <h1>Create a Curdle</h1>
-  <form @submit="copyLinkToClipboard">
+  <form id="maker" @submit="copyLinkToClipboard">
     <p>Enter a 5-letter word:</p>
     <p><input type="text" v-model="word" /></p>
     <p class="indicator">{{ indication }}</p>
@@ -10,7 +9,7 @@
     <div class="link">
       <p>Copy this link to share your Curdle:</p>
       <p>
-        <a :href="link">{{ link }} </a>
+        <a :href="link">{{ link }}</a>
       </p>
       <p><input type="submit" value="COPY" /></p>
     </div>
@@ -63,5 +62,10 @@ function showMessage(msg: string, time = 1000) {
 
 .indicator {
   margin-top: -1rem;
+}
+
+form#maker {
+  flex: 1;
+  margin-top: 10%;
 }
 </style>

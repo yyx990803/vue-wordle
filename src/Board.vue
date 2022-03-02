@@ -47,7 +47,8 @@ const props = defineProps({
   },
 })
 
-const { sender, indicator } = getWordOfTheDay()
+let { sender, indicator } = getWordOfTheDay()
+if (indicator == null) indicator = "invalid"
 
 // Board state. Each tile is represented as { letter, state }
 const board = $ref(

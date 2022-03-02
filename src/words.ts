@@ -3,7 +3,7 @@ import dictionary from "./dictionary.json"
 type GameInfo = {
   word: string | null
   sender: string | null
-  indicator: keyof typeof indications | null
+  indicator: keyof typeof indications
 }
 
 export const indications = {
@@ -18,7 +18,7 @@ const nullGame = { word: null, sender: null, indicator: null }
 
 export function getWordOfTheDay(): GameInfo {
   const gameId = new URLSearchParams(location.search).get("game")
-  if (gameId == null) return nullGame
+  if (gameId == null) return { ...nullGame, indicator: "invalid" }
 
   let decodedGameId
   try {
