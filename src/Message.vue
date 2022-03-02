@@ -2,7 +2,7 @@
   <Transition>
     <div class="message" v-if="message">
       <p>{{ copied ? "Copied results to clipboard" : message }}</p>
-      <p>
+      <p v-if="paste">
         <textarea readonly ref="textarea">{{ paste }}</textarea>
       </p>
       <button v-if="paste" @click="copyPaste">Share</button>
