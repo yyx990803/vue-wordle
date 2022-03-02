@@ -38,7 +38,12 @@ import { onUnmounted } from "vue"
 import { LetterState } from "./types"
 import Message from "./Message.vue"
 import Keyboard from "./Keyboard.vue"
-import { getWordOfTheDay, wordInDictionary, indications } from "./words"
+import {
+  getWordOfTheDay,
+  wordInDictionary,
+  indications,
+  recreateGameId,
+} from "./words"
 
 const props = defineProps({
   answer: {
@@ -62,7 +67,6 @@ const board = $ref(
 
 // Feedback state: message and shake
 let message = $ref("")
-let grid = $ref("")
 let shakeRowIndex = $ref(-1)
 let success = $ref(false)
 
@@ -96,13 +100,23 @@ const icons = {
   [LetterState.INITIAL]: null,
 }
 
-function genResultGrid() {
-  return board
+let sharePaste = $ref("")
+function makeSharePaste() {
+  const boardString = board
     .slice(0, currentRowIndex + 1)
     .map((row) => {
       return row.map((tile) => icons[tile.state]).join("")
     })
     .join("\n")
+  const gameId = recreateGameId(props.answer, sender)
+  const finalIndex = currentRowIndex >= 6 ? "X" : currentRowIndex + 1
+  return [
+    `Curdle ${gameId} ${finalIndex}/6`,
+    ,
+    boardString,
+    ,
+    `${location.origin}${location.pathname}?game=${gameId}`,
+  ].join("\n")
 }
 
 // Handle keyboard input.
@@ -192,13 +206,8 @@ function completeRow() {
     if (currentRow.every((tile) => tile.state === LetterState.CORRECT)) {
       // yay!
       setTimeout(() => {
-        grid = genResultGrid()
-        showMessage(
-          ["Genius", "Magnificent", "Impressive", "Splendid", "Great", "Phew"][
-            currentRowIndex
-          ],
-          -1
-        )
+        sharePaste = makeSharePaste()
+        showMessage("Nice", -1)
         success = true
       }, 1600)
     } else if (currentRowIndex < board.length - 1) {
@@ -209,6 +218,8 @@ function completeRow() {
       }, 1600)
     } else {
       // game over :(
+      currentRowIndex++
+      sharePaste = makeSharePaste()
       setTimeout(() => {
         showMessage(props.answer.toUpperCase(), -1)
       }, 1600)
