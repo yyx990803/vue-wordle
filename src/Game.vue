@@ -3,6 +3,7 @@ import { onUnmounted } from "vue"
 import { getWordOfTheDay, wordInDictionary } from "./words"
 import Keyboard from "./Keyboard.vue"
 import { LetterState } from "./types"
+import Message from "./Message.vue"
 
 const { word, sender } = getWordOfTheDay()
 let answer: string
@@ -180,12 +181,7 @@ function genResultGrid() {
 </script>
 
 <template>
-  <Transition>
-    <div class="message" v-if="message">
-      {{ message }}
-      <pre v-if="grid">{{ grid }}</pre>
-    </div>
-  </Transition>
+  <Message :message="message"></Message>
   <header>
     <h1>CURDLE</h1>
     <h2><span>cu</span>stom wo<span>rdle</span></h2>
@@ -233,22 +229,7 @@ function genResultGrid() {
   width: min(350px, calc(var(--height) / 6 * 5));
   margin: 0px auto;
 }
-.message {
-  position: absolute;
-  left: 50%;
-  top: 80px;
-  color: #fff;
-  background-color: rgba(0, 0, 0, 0.85);
-  padding: 16px 20px;
-  z-index: 2;
-  border-radius: 4px;
-  transform: translateX(-50%);
-  transition: opacity 0.3s ease-out;
-  font-weight: 600;
-}
-.message.v-leave-to {
-  opacity: 0;
-}
+
 .row {
   display: grid;
   grid-template-columns: repeat(5, 1fr);
