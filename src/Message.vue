@@ -1,7 +1,8 @@
 <template>
   <Transition>
     <div class="message" v-if="message">
-      <p>{{ copied ? "Copied results to clipboard" : message }}</p>
+      <p>{{ message }}</p>
+      <p v-if="copied">Copied results to clipboard</p>
       <p v-if="paste">
         <textarea readonly ref="textarea">{{ paste }}</textarea>
       </p>
