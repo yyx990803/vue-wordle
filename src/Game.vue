@@ -113,7 +113,7 @@ function completeRow() {
       setTimeout(() => {
         grid = genResultGrid()
         showMessage(
-          ['Genius', 'Magnificent', 'Impressive', 'Splendid', 'Great', 'Phew'][
+          ['Birds!', 'Flock Yeah!', 'Feathery', 'Majestic', 'Chirp Chirp', 'Pluck! that was close.'][
             currentRowIndex
           ],
           -1
@@ -179,7 +179,7 @@ function genResultGrid() {
     </div>
   </Transition>
   <header>
-    <h1>VVORDLE</h1>
+    <h1>BIRDLE</h1>
     <a
       id="source-link"
       href="https://github.com/yyx990803/vue-wordle"

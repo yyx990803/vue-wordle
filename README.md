@@ -1,4 +1,12 @@
-# Vue Wordle
+# Birdle
+
+
+This is a slight alteration of vue-wordle: https://github.com/yyx990803/vue-wordle
+
+It's just an inside joke version of the game that my bird loving friends like to play.
+
+Everything below is from the main branch at the time I forked.
+****************************************************************
 
 [Live demo](https://vue-wordle.netlify.app/)
 
