@@ -82,7 +82,7 @@ function completeRow() {
     const answerLetters: (string | null)[] = answer.split('')
     // first pass: mark correct ones
     currentRow.forEach((tile, i) => {
-      if (answerLetters[i] === tile.letter) {
+      if (answerLetters[i] === tile.letter || answerLetters[i] === tile.letter.toLocaleUpperCase()) {
         tile.state = letterStates[tile.letter] = LetterState.CORRECT
         answerLetters[i] = null
       }
