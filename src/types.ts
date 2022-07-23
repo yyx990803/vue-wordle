@@ -4,3 +4,8 @@ export const enum LetterState {
   PRESENT = 'present',
   ABSENT = 'absent'
 }
+
+export interface Tile {
+  letter: string
+  state: LetterState
+}
