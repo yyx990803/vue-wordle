@@ -7,7 +7,7 @@ export function getWordOfTheDay() {
       if (query.length !== 5) {
         alert(`Incorrect word length from encoded query. ${defaultMessage}`)
       } else {
-        return query
+        return query.toLowerCase();
       }
     } catch (e) {
       alert(`Malformed encoded word query. ${defaultMessage}`)
